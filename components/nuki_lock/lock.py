@@ -741,7 +741,7 @@ async def to_code(config):
         cg.add_library(
             "NukiBleEsp32",
             None,
-            "https://github.com/iranl/NukiBleEsp32#98872d9004118f1ba2cb3685a30863eb19930cda",
+            "https://github.com/iranl/NukiBleEsp32#cf762e7",
         )
 
     # Defines
