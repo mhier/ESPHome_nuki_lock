@@ -56,6 +56,7 @@ lock:
     security_pin: 1234
   # Optional: Advanced Settings
     pairing_as_app: false
+    ultra_pairing_mode: false
     query_interval_config: 3600s
     query_interval_auth_data: 7200s
 
@@ -194,6 +195,7 @@ lock:
     security_pin: 1234
   # Optional: Advanced Settings
     pairing_as_app: false
+    ultra_pairing_mode: false
     query_interval_config: 3600s
     query_interval_auth_data: 7200s
 
@@ -309,9 +311,10 @@ Your Nuki Smartlock is now connected and ready to use!
 The following settings allow you to customize the behavior of the Nuki Lock component, optimizing its performance and reliability. You can configure these in your ESPHome YAML file:
 
 - **`security_pin`**: The Nuki security PIN required for performing specific operations (Event Logs, Auth Data, Keypad, ...).
-- **`pairing_mode_timeout`**: Specifies how long (in seconds) the pairing mode remains active. Default: `300s`.
 - **`event`**: Defines the event name used by the Nuki Lock component. Default: `nuki`.
 - **`pairing_as_app`**: Determines if pairing should be done as an app. This is not recommended for most setups. Default: `false`.
+- **`ultra_pairing_mode`**: Enables support for pairing the Smart Lock Ultra. Default: `false`.
+- **`pairing_mode_timeout`**: Specifies how long (in seconds) the pairing mode remains active. Default: `300s`.
 - **`query_interval_config`**: Sets the interval (in seconds) for querying the configuration. Default: `3600s`.
 - **`query_interval_auth_data`**: Sets the interval (in seconds) for querying authentication data. Default: `7200s`.
 

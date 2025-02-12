@@ -1591,15 +1591,18 @@ void NukiLockComponent::print_keypad_entries() {
 void NukiLockComponent::dump_config() {
     ESP_LOGCONFIG(TAG, "NUKI LOCK:");
 
-    if (strcmp(this->event_, "esphome.none") != 0) {
+    if (this->send_events_) {
         ESP_LOGCONFIG(TAG, "  Event: %s", this->event_);
     } else {
         ESP_LOGCONFIG(TAG, "  Event: Disabled");
     }
 
-    ESP_LOGCONFIG(TAG, "  Pairing Identity: %s",this->pairing_as_app_ ? "App" : "Bridge");
-
+    ESP_LOGCONFIG(TAG, "  Pairing Identity: %s", this->pairing_as_app_ ? "App" : "Bridge");
+    ESP_LOGCONFIG(TAG, "  Pairing Process: %s", this->ultra_pairing_mode_ ? "Smart Lock Ultra" : "Smart Lock Gen 1-4");
     ESP_LOGCONFIG(TAG, "  Pairing mode timeout: %us", this->pairing_mode_timeout_);
+
+    ESP_LOGCONFIG(TAG, "  Alternative Connect Mode: %s", YESNO(this->alt_connect_mode_));
+
     ESP_LOGCONFIG(TAG, "  Configuration query interval: %us", this->query_interval_config_);
     ESP_LOGCONFIG(TAG, "  Auth Data query interval: %us", this->query_interval_auth_data_);
 
