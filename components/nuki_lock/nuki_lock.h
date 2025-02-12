@@ -48,7 +48,7 @@ enum PinState
 
 struct NukiLockSettings
 {
-    uint16_t security_pin;
+    uint32_t security_pin;
     PinState pin_state;
 };
 
@@ -148,7 +148,7 @@ class NukiLockComponent : public lock::Lock, public PollingComponent, public Nuk
                 this->send_events_ = true;
             }
         }
-        void set_security_pin(uint16_t security_pin) {
+        void set_security_pin(uint32_t security_pin) {
             this->security_pin_config_ = security_pin;
             this->security_pin_ = security_pin;
         }
@@ -183,7 +183,7 @@ class NukiLockComponent : public lock::Lock, public PollingComponent, public Nuk
 
         void pin_state_to_string(const PinState value, char* str);
 
-        void use_security_pin(uint16_t security_pin);
+        void use_security_pin(uint32_t security_pin);
 
         void unpair();
         void set_pairing_mode(bool enabled);
@@ -215,7 +215,7 @@ class NukiLockComponent : public lock::Lock, public PollingComponent, public Nuk
         void publish_pin_state();
 
         bool is_pin_valid();
-        uint16_t get_pin();
+        uint32_t get_pin();
 
         bool execute_lock_action(NukiLock::LockAction lock_action);
 
@@ -244,11 +244,13 @@ class NukiLockComponent : public lock::Lock, public PollingComponent, public Nuk
         bool open_latch_;
         bool lock_n_go_;
 
+        bool is_ultra_ = false;
+
         bool pairing_as_app_ = false;
 
         PinState pin_state_ = PinState::NotSet;
-        uint16_t security_pin_ = 0;
-        uint16_t security_pin_config_ = 0;
+        uint32_t security_pin_ = 0;
+        uint32_t security_pin_config_ = 0;
 
         const char* event_;
         bool send_events_ = false;
@@ -304,7 +306,7 @@ template<typename... Ts> class NukiLockPairingModeAction : public Action<Ts...> 
 template<typename... Ts> class NukiLockSecurityPinAction : public Action<Ts...> {
     public:
         NukiLockSecurityPinAction(NukiLockComponent *parent) : parent_(parent) {}
-        TEMPLATABLE_VALUE(uint16_t, security_pin)
+        TEMPLATABLE_VALUE(uint32_t, security_pin)
 
         void play(Ts... x) { this->parent_->use_security_pin(this->security_pin_.value(x...)); }
 

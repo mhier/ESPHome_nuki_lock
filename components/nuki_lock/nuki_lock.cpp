@@ -681,7 +681,7 @@ void NukiLockComponent::update_config() {
         memset(str, 0, sizeof(str));
         this->homekit_status_to_string(config.homeKitStatus, str);
         ESP_LOGD(TAG, "Homekit Status: %s", str);
-        
+
         // Check if pin is valid and save state
         this->set_retry(
             "validate_pin", 100, 3,
@@ -765,9 +765,14 @@ void NukiLockComponent::update_advanced_config() {
         }
 
         // Gen 1-4 only
-        if (this->auto_battery_type_detection_enabled_switch_ != nullptr) {
+        if (!this->is_ultra && this->auto_battery_type_detection_enabled_switch_ != nullptr) {
             this->auto_battery_type_detection_enabled_switch_->publish_state(advanced_config.automaticBatteryTypeDetection);
         }
+
+        // Ultra only
+        /*if (this->is_ultra && this->slow_speed_during_night_mode_enabled_switch_ != nullptr) {
+            this->slow_speed_during_night_mode_enabled_switch_->publish_state(advanced_config.enableSlowSpeedDuringNightMode);
+        }*/
         #endif
 
         #ifdef USE_NUMBER
@@ -790,11 +795,18 @@ void NukiLockComponent::update_advanced_config() {
         }
 
         // Gen 1-4 only
-        if (this->battery_type_select_ != nullptr) {
+        if (!this->is_ultra_ && this->battery_type_select_ != nullptr) {
             memset(str, 0, sizeof(str));
             this->battery_type_to_string(advanced_config.batteryType, str);
             this->battery_type_select_->publish_state(str);
         }
+
+        // Ultra
+        /*if (this->is_ultra_ && this->motor_speed_select_ != nullptr) {
+            memset(str, 0, sizeof(str));
+            this->motor_speed_to_string(advanced_config.motorSpeed, str);
+            this->motor_speed_select_->publish_state(str);
+        }*/
         #endif
     } else {
         ESP_LOGE(TAG, "requestAdvancedConfig has resulted in %s (%d)", str, conf_req_result);
@@ -1062,7 +1074,7 @@ bool NukiLockComponent::execute_lock_action(NukiLock::LockAction lock_action) {
     }
 }
 
-void NukiLockComponent::use_security_pin(uint16_t security_pin) {
+void NukiLockComponent::use_security_pin(uint32_t security_pin) {
 
     // Use config pin if set to 0
     if(security_pin == 0 && this->security_pin_config_ != 0) {
@@ -1085,7 +1097,7 @@ void NukiLockComponent::use_security_pin(uint16_t security_pin) {
 
     // Set new pin
     if(this->get_pin() != this->security_pin_) {
-        bool result = this->nuki_lock_.saveSecurityPincode(this->security_pin_);
+        bool result = this->is_ultra_ ? this->nuki_lock_.saveUltraPincode(this->security_pin_) : this->nuki_lock_.saveSecurityPincode(this->security_pin_);
         if (result) {
             ESP_LOGI(TAG, "Succesfully set security pin!");
         } else {
@@ -1100,8 +1112,12 @@ bool NukiLockComponent::is_pin_valid() {
     return this->pin_state_ == PinState::Valid;
 }
 
-uint16_t NukiLockComponent::get_pin() {
-    return this->nuki_lock_.getSecurityPincode();
+uint32_t NukiLockComponent::get_pin() {
+    if(this->is_ultra_) {
+        return this->nuki_lock_.getUltraPincode();
+    } else {
+        return this->nuki_lock_.getSecurityPincode();
+    }
 }
 
 void NukiLockComponent::setup() {
@@ -1720,11 +1736,15 @@ void NukiLockComponent::set_config_select(const char* config, const char* value)
     } else if (strcmp(config, "advertising_mode") == 0) {
         Nuki::AdvertisingMode mode = this->advertising_mode_to_enum(value);
         cmd_result = this->nuki_lock_.setAdvertisingMode(mode);
-    } else if (strcmp(config, "battery_type") == 0) {
+    } else if (!this->is_ultra && strcmp(config, "battery_type") == 0) {
         Nuki::BatteryType type = this->battery_type_to_enum(value);
         cmd_result = this->nuki_lock_.setBatteryType(type);
         is_advanced = true;
-    }
+    }/*else if (this->is_ultra && strcmp(config, "motor_speed") == 0) {
+        Nuki::MotorSpeed speed = this->motor_speed_to_enum(value);
+        cmd_result = this->nuki_lock_.setMotorSpeed(speed);
+        is_advanced = true;
+    }*/
 
     if (cmd_result == Nuki::CmdResult::Success) {
         if (strcmp(config, "single_button_press_action") == 0 && this->single_button_press_action_select_ != nullptr) {
@@ -1794,9 +1814,11 @@ void NukiLockComponent::set_config_switch(const char* config, bool value) {
         cmd_result = this->nuki_lock_.enableSingleLock(value);
     } else if (strcmp(config, "dst_mode_enabled") == 0) {
         cmd_result = this->nuki_lock_.enableDst(value);
-    } else if (strcmp(config, "auto_battery_type_detection_enabled") == 0) {
+    } else if (!this->is_ultra && strcmp(config, "auto_battery_type_detection_enabled") == 0) {
         cmd_result = this->nuki_lock_.enableAutoBatteryTypeDetection(value);
-    }
+    }/*else if (this->is_ultra && strcmp(config, "slow_speed_during_night_mode_enabled") == 0) {
+        cmd_result = this->nuki_lock_.enableSlowSpeedDuringNightMode(value);
+    }*/
 
     if (cmd_result == Nuki::CmdResult::Success)
     {
