@@ -122,6 +122,8 @@ lock:
       name: "Nuki Daylight Saving Time"
     auto_battery_type_detection_enabled:
       name: "Nuki Automatic Battery Type Detection"
+    slow_speed_during_night_mode_enabled:
+      name: "Nuki Slow Speed During Night Mode"
   # Optional: Select Inputs
     single_buton_press_action:
       name: "Nuki Button: Single Press Action"
@@ -139,6 +141,8 @@ lock:
       name: "Nuki Advertising Mode"
     battery_type:
       name: "Nuki Battery Type"
+    motor_speed:
+      name: "Nuki Motor Speed"
   # Optional: Buttons
     unpair:
       name: "Nuki Unpair Device"
@@ -256,6 +260,8 @@ lock:
       name: "Nuki Daylight Saving Time"
     auto_battery_type_detection_enabled:
       name: "Nuki Automatic Battery Type Detection"
+    slow_speed_during_night_mode_enabled:
+      name: "Nuki Slow Speed During Night Mode"
   # Optional: Select Inputs
     single_buton_press_action:
       name: "Nuki Button: Single Press Action"
@@ -273,6 +279,8 @@ lock:
       name: "Nuki Advertising Mode"
     battery_type:
       name: "Nuki Battery Type"
+    motor_speed:
+      name: "Nuki Motor Speed"
   # Optional: Buttons
     unpair:
       name: "Nuki Unpair Device"
@@ -502,7 +510,8 @@ context:
 - Single Lock
 - Daylight Saving Time
 - Automatic Updates
-- Automatic Battery Type Detection
+- Automatic Battery Type Detection (Smart Lock Gen 1-4)
+- Slow Speed During Night Mode (Smart Lock Ultra)
 
 **Select Input:**  
 - Single Button Press Action
@@ -512,7 +521,8 @@ context:
 - Fob Action 3
 - Timezone
 - Advertising Mode
-- Battery Type
+- Battery Type (Smart Lock Gen 1-4)
+- Motor Speed (Smart Lock Ultra)
 
 **Number Input:**  
 - LED Brightness
