@@ -814,11 +814,17 @@ def _final_validate(config):
         "esp32_ble_server"
     ]
 
+    
+
     if CORE.is_esp32:
         # Check if any of the incompatible components are in the configuration
-        if any(component in full_config for component in incompatible_components):
-            raise cv.Invalid(f"The `nuki_lock` component relies on NimBLE, which is incompatible with the ESPHome BLE stack.\nTo use `nuki_lock`, please remove all Bluetooth components (esp32_ble, esp32_improv, ...) from your configuration.")
-        
+        used_incompatible_components = [component for component in incompatible_components if component in full_config]
+        if used_incompatible_components:
+            raise cv.Invalid(
+                f"The `nuki_lock` component relies on NimBLE, which is incompatible with the ESPHome BLE stack.\n"
+                f"To use `nuki_lock`, please remove the following Bluetooth components from your configuration: {', '.join(used_incompatible_components)}."
+            )
+
         # Check for PSRAM support
         if "psram" in full_config:
             if CORE.using_esp_idf:
