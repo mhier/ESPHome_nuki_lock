@@ -435,7 +435,6 @@ CONFIG_SCHEMA = cv.All(
                 icon="mdi:speedometer-medium",
             ),
             cv.Optional(CONF_ULTRA_PAIRING_MODE, default="false"): cv.boolean,
-            cv.Optional(CONF_ALT_CONNECT_MODE, default="true"): cv.boolean,
             cv.Optional(CONF_PAIRING_AS_APP, default="false"): cv.boolean,
             cv.Optional(CONF_PAIRING_MODE_TIMEOUT, default="300s"): cv.positive_time_period_seconds,
             cv.Optional(CONF_EVENT, default="nuki"): cv.string,
