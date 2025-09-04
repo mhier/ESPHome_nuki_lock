@@ -65,6 +65,7 @@ CONF_FOB_ACTION_3_SELECT = "fob_action_3"
 CONF_TIMEZONE_SELECT = "timezone"
 CONF_ADVERTISING_MODE_SELECT = "advertising_mode"
 CONF_BATTERY_TYPE_SELECT = "battery_type"
+CONF_MOTOR_SPEED_SELECT = "motor_speed"
 
 CONF_LED_BRIGHTNESS_NUMBER = "led_brightness"
 CONF_TIMEZONE_OFFSET_NUMBER = "timezone_offset"
