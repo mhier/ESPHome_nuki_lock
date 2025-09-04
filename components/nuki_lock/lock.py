@@ -55,6 +55,7 @@ CONF_AUTO_UPDATE_ENABLED_SWITCH = "auto_update_enabled"
 CONF_SINGLE_LOCK_ENABLED_SWITCH = "single_lock_enabled"
 CONF_DST_MODE_ENABLED_SWITCH = "dst_mode_enabled"
 CONF_AUTO_BATTERY_TYPE_DETECTION_ENABLED_SWITCH = "auto_battery_type_detection_enabled"
+CONF_SLOW_SPEED_DURING_NIGHT_MODE_ENABLED_SWITCH = "slow_speed_during_night_mode"
 
 CONF_SINGLE_BUTTON_PRESS_ACTION_SELECT = "single_buton_press_action"
 CONF_DOUBLE_BUTTON_PRESS_ACTION_SELECT = "double_buton_press_action"
