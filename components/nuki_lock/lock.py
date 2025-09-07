@@ -748,16 +748,21 @@ async def to_code(config):
 
         add_idf_component(
             name="NukiBleEsp32",
-            repo="https://github.com/AzonInc/NukiBleEsp32.git",
-            ref="idf",
+            repo="https://github.com/iranl/NukiBleEsp32.git",
+            ref="98872d9",
         )
+        # add_idf_component(
+        #     name="NukiBleEsp32",
+        #     repo="https://github.com/AzonInc/NukiBleEsp32.git",
+        #     ref="idf",
+        # )
 
         cg.add_build_flag("-DNUKI_USE_LATEST_NIMBLE=y")
     else:
         cg.add_build_flag("-DCONFIG_BTDM_BLE_SCAN_DUPL=y")
         cg.add_build_flag("-DCONFIG_NIMBLE_CPP_LOG_LEVEL=0")
         cg.add_build_flag("-DCONFIG_BT_NIMBLE_LOG_LEVEL=0")
-        cg.add_build_flag("-DCONFIG_BT_NIMBLE_ROLE_PERIPHERAL=y")
+#        cg.add_build_flag("-DCONFIG_BT_NIMBLE_ROLE_PERIPHERAL=y")
         cg.add_build_flag("-DCONFIG_BT_NIMBLE_LOG_LEVEL_NONE=y")
 
         cg.add_build_flag("-DNUKI_USE_LATEST_NIMBLE=y")
@@ -775,7 +780,7 @@ async def to_code(config):
         cg.add_library(
             "NukiBleEsp32",
             None,
-            "https://github.com/I-Connect/NukiBleEsp32#e3badba",
+            "https://github.com/iranl/NukiBleEsp32#98872d9",
         )
 
     # Defines
@@ -835,7 +840,7 @@ def _final_validate(config):
                 add_idf_sdkconfig_option("CONFIG_BT_BLE_DYNAMIC_ENV_MEMORY", True)
             else:
                 cg.add_build_flag(f"-DCONFIG_BT_NIMBLE_MEM_ALLOC_MODE_EXTERNAL=1")
-                cg.add_build_flag(f"-DCONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL=50768")
+#                cg.add_build_flag(f"-DCONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL=50768")
                 cg.add_build_flag(f"-DCONFIG_BT_ALLOCATION_FROM_SPIRAM_FIRST=1")
                 cg.add_build_flag(f"-DCONFIG_BT_BLE_DYNAMIC_ENV_MEMORY=1")
         else:

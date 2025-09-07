@@ -1717,7 +1717,9 @@ void NukiLockComponent::set_pairing_mode(bool enabled) {
     cancel_timeout("pairing_mode_timeout");
 
     if (enabled) {
-        ESP_LOGI(TAG, "Pairing Mode turned on for %d seconds", this->pairing_mode_timeout_);
+        ESP_LOGI(TAG, "!!! Pairing Mode turned on for %d seconds", this->pairing_mode_timeout_);
+        ESP_LOGI(TAG, "Security pin: %d", this->nuki_lock_.getUltraPincode());
+        this->nuki_lock_.setDebugConnect(true);
         this->pairing_mode_on_callback_.call();
 
         ESP_LOGI(TAG, "Waiting for Nuki to enter pairing mode...");
