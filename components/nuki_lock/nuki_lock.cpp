@@ -1189,6 +1189,8 @@ void NukiLockComponent::setup() {
     this->nuki_lock_.setConnectRetries(BLE_CONNECT_TIMEOUT_RETRIES);
     
     this->nuki_lock_.setDisconnectTimeout(BLE_DISCONNECT_TIMEOUT);
+
+    this->nuki_lock_.setPower(ESP_PWR_LVL_P20);
     
 
     if (recovered.security_pin != 0) {
@@ -1382,7 +1384,7 @@ void NukiLockComponent::update() {
         // Pairing Mode is active
         if (this->pairing_mode_) {
             // Pair Nuki
-            Nuki::AuthorizationIdType type = this->pairing_as_app_ ? Nuki::AuthorizationIdType::App : Nuki::AuthorizationIdType::Bridge;
+            Nuki::AuthorizationIdType type = (this->pairing_as_app_ || this->ultra_pairing_mode_) ? Nuki::AuthorizationIdType::App : Nuki::AuthorizationIdType::Bridge;
             bool paired = this->nuki_lock_.pairNuki(type) == Nuki::PairingResult::Success;
 
             if (paired) {
@@ -1718,7 +1720,7 @@ void NukiLockComponent::set_pairing_mode(bool enabled) {
 
     if (enabled) {
         ESP_LOGI(TAG, "!!! Pairing Mode turned on for %d seconds", this->pairing_mode_timeout_);
-        ESP_LOGI(TAG, "Security pin: %d", this->nuki_lock_.getUltraPincode());
+        ESP_LOGI(TAG, ">>> Security pin: %d", this->nuki_lock_.getUltraPincode());
         this->nuki_lock_.setDebugConnect(true);
         this->pairing_mode_on_callback_.call();
 
