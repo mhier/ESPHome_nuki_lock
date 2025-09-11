@@ -1150,7 +1150,7 @@ uint32_t NukiLockComponent::get_pin() {
 
 void NukiLockComponent::setup() {
     ESP_LOGI(TAG, "Starting NUKI Lock...");
-
+ 
     // Increase Watchdog Timeout
     // Fixes Pairing Crash
     esp_task_wdt_config_t wdt_config = {
@@ -1385,8 +1385,12 @@ void NukiLockComponent::update() {
         if (this->pairing_mode_) {
             // Pair Nuki
             Nuki::AuthorizationIdType type = (this->pairing_as_app_ || this->ultra_pairing_mode_) ? Nuki::AuthorizationIdType::App : Nuki::AuthorizationIdType::Bridge;
-            bool paired = this->nuki_lock_.pairNuki(type) == Nuki::PairingResult::Success;
-
+            bool paired  = false;
+            int retries = 0;
+            while(!paired && ++retries < 20) {
+                bool paired = this->nuki_lock_.pairNuki(type) == Nuki::PairingResult::Success;
+                if(!paired) delay(50);
+            }
             if (paired) {
                 ESP_LOGI(TAG, "Nuki paired successfuly as %s!", this->pairing_as_app_ ? "App" : "Bridge");
                 this->update_status();
